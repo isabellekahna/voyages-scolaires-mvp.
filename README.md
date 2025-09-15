@@ -1,20 +1,20 @@
-# Voyages scolaires – MVP (Ultra simple)
+# Voyages scolaires – MVP (Flat + Postgres Supabase)
 
-Ce starter tient en **4 fichiers** (pas de dossiers), pour un upload facile via GitHub Web.
+Cette version enregistre dans **Supabase Postgres** (persistant).
+Toujours **4 fichiers à la racine** pour un upload facile via GitHub Web.
 
-## Fichiers
-- `Dockerfile`
-- `requirements.txt`
-- `main.py` (FastAPI minimal)
-- `README.md` (ce fichier)
+## Variables à définir sur Railway
+- `DATABASE_URL` = l’URI Supabase (ajoutez `?sslmode=require` si besoin)
+- `ALLOWED_ORIGINS` = ajoutez votre domaine Lovable et `https://*.up.railway.app`
+- (option) `JWT_SECRET`
 
-## Déployer sur Railway (Deploy from GitHub)
-1) Créez un dépôt GitHub vide (New repository).
-2) **Upload files** → glissez **ces 4 fichiers** à la racine (pas de dossier).
-3) Sur Railway → New Project → **Deploy from GitHub** → choisissez ce dépôt.
-4) Ajoutez les Variables :
-   - `JWT_SECRET` = une longue chaîne aléatoire
-   - `ALLOWED_ORIGINS` = `https://*.retool.com`
-   - (Optionnel pour l’instant) `DATABASE_URL` et `OCR_DEBUG` (l’app démarre sans).
+## Démarrer
+- `Dockerfile` lance automatiquement : `uvicorn main:app --host 0.0.0.0 --port 8000`
+- Ouvrez `…railway.app/docs` pour tester.
 
-Une fois déployé, ouvrez l’URL et ajoutez `/docs` pour tester.
+## Schéma créé automatiquement
+- `trips` (id UUID, name, classe, status, created_at)
+- `students` (id UUID, trip_id FK, …)
+- `links` (token PK, trip_id FK, student_id FK NULL, status, created_at)
+
+> NB : on utilise `gen_random_uuid()` de l’extension `pgcrypto`.
